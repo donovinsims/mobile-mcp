@@ -83,6 +83,19 @@ More details in our [wiki page](https://github.com/mobile-next/mobile-mcp/wiki) 
 
 ## Installation and configuration
 
+### Prerequisites
+
+Before connecting an MCP-capable client, make sure the host machine has:
+
+- **Node.js 22+** (or a compatible runtime for `npx`).
+- **Xcode Command Line Tools** if you plan to automate iOS simulators or devices.
+- **Android Platform Tools** (`adb`, `emulator`, `avdmanager`) for Android automation.
+- **Access to simulators/emulators or real devices** that the assistant can control.
+
+If you're planning to run headless, start the desired simulator or emulator ahead of time—for example, with `xcrun simctl boot <device>` on macOS or `emulator -avd <name>` for Android. When targeting physical hardware, connect it via USB (and ensure developer mode is enabled) before launching the MCP server.
+
+### Register the MCP server
+
 Setup our MCP with Cline, Cursor, Claude, VS Code, Github Copilot:
 
 ```json
@@ -105,11 +118,42 @@ Setup our MCP with Cline, Cursor, Claude, VS Code, Github Copilot:
 claude mcp add mobile -- npx -y @mobilenext/mobile-mcp@latest
 ```
 
+### Client-specific setup guides
+
+#### Cline
+1. Open Cline and navigate to **Settings → MCP Servers**.
+2. Paste the JSON snippet above into your MCP configuration file (or add the new `mobile-mcp` entry if you already have other servers configured).
+3. Save the file and restart Cline so that the new server is discovered.
+
+#### Cursor
+1. Open Cursor and press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>,</kbd> to open **Settings**.
+2. In the **Model Context Protocol** section, choose **Add MCP Server**.
+3. Select **Custom server**, enter `mobile-mcp` as the name, and provide the command `npx -y @mobilenext/mobile-mcp@latest`.
+4. Confirm and restart the Cursor agent so the tools become available in chat.
+
+#### Claude Code
+Run the command above in your terminal to register the server with Claude Code, then restart the Claude Code extension if it was already running.
+
+#### VS Code
+1. Install the [VS Code MCP extension](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22mobile-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40mobilenext%2Fmobile-mcp%40latest%22%5D%7D) if you haven't already.
+2. Open the MCP configuration (`settings.json`) and add the JSON snippet above under the `"mcpServers"` key.
+3. Reload VS Code to initialize the new server.
+
+#### GitHub Copilot
+1. Open GitHub Copilot in the IDE of your choice and navigate to **Settings → MCP** (or **Tools → Manage MCP Servers**).
+2. Add a new server named `mobile-mcp` with the command `npx -y @mobilenext/mobile-mcp@latest`.
+3. Save the configuration and relaunch Copilot so that the new MCP tools are loaded in the chat sidebar.
+
 [Gemini CLI:](https://cloud.google.com/gemini/docs/codeassist/gemini-cli)
 
-```
-gemini mcp add mobile npx -y @mobilenext/mobile-mcp@latest
-```
+1. Install or update the CLI if needed.
+2. Register the server:
+
+   ```
+   gemini mcp add mobile npx -y @mobilenext/mobile-mcp@latest
+   ```
+
+3. Restart any running Gemini sessions so the new tools appear.
 
 [Read more in our wiki](https://github.com/mobile-next/mobile-mcp/wiki)! 🚀
 
@@ -119,6 +163,12 @@ gemini mcp add mobile npx -y @mobilenext/mobile-mcp@latest
 After adding the MCP server to your IDE/Client, you can instruct your AI assistant to use the available tools.
 For example, in Cursor's agent mode, you could use the prompts below to quickly validate, test and iterate on UI intereactions, read information from screen, go through complex workflows.
 Be descriptive, straight to the point.
+
+#### Recommended next steps
+
+1. **Verify tool discovery** – Ask your assistant (for example, “List the available MCP tools”) to ensure the server registered correctly.
+2. **Run a smoke test** – Try one of the prompts below against a simulator/emulator to confirm end-to-end wiring.
+3. **Scale up** – Once validated, script your own workflows or connect staging/QA builds for broader coverage.
 
 ### ✨ Example Prompts
 
